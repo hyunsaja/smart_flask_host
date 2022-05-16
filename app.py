@@ -23,17 +23,14 @@ class SmartPost(Resource):
         thickness = request.json.get('thickness')
         try:
             if 'camshot' in cmd:
-                print(cmd)
                 msg = camhost.camshot(expos, thickness)
-                print('CamshotOK')
                 if 'CamshotOK' in msg:
-                    print('camimgshot')
                     msg2 = imghost.imgshot(fname)
-                    print(msg2)
                     msg = msg2
-                
+                    return {'message': msg}
+                else:
+                    return {'message': 'CamshotError'}
             elif 'imgshot' in cmd:
-                print(cmd)
                 msg2 = imghost.imgshot(fname)
                 print(msg2)
                 msg = msg2
@@ -49,6 +46,7 @@ class SmartPost(Resource):
                     # shutil.copy('./point.txt', './nc.cnc')   
                     shutil.copy('./point.txt', '/home/pi/nc.cnc')   
                 msg = "ShotOK"
+                return {'message': msg}
             else:
                 return {'message':'nomatch'}
         except:
